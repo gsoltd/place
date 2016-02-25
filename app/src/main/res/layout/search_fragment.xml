@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/map1">
+
+    <SearchView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchViewPlace"
+        android:layout_gravity="center_horizontal" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/btnSearchNearbyPlaceSearchFragment"
+
+            android:text="Search_nearby_place"
+            android:textColor="#FF40B9"
+            android:textSize="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_search_nearby"
+            android:shadowColor="#A8A8A8"
+            android:shadowDx="5"
+            android:shadowDy="5"
+            android:shadowRadius="5"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/space12"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/btnSearchByNameSearchFragment"
+            android:text="Search by name"
+            android:textColor="#FF40B9"
+            android:textSize="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_search_name"
+            android:shadowColor="#A8A8A8"
+            android:shadowDx="5"
+            android:shadowDy="5"
+            android:shadowRadius="5"
+            />
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/listViewSearchResult"
+        android:layout_gravity="center_horizontal" />
+</LinearLayout>

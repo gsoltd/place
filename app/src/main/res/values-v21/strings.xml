@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">BenPlaces</string>
+    <string name="action_settings">Settings</string>
+    <string name="nearby_place">Nearby place</string>
+    <string name="search_place">Search place</string>
+    <string name="google_app_id"></string>
+    <string name="title_activity_setting">SettingActivity</string>
+    <string name="distance">Distance</string>
+</resources>
