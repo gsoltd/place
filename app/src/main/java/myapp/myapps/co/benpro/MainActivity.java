@@ -138,21 +138,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         transaction.commit();
     }
 
-    public void FindPlacesAroundYou() {
-
-        try {
-            PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
-            Intent intent = intentBuilder.build(this);
-            startActivityForResult(intent, Constant.REQUEST_CODE_GOOGLE);
-
-        } catch (GooglePlayServicesRepairableException e) {
-            GoogleApiAvailability.getInstance().getErrorDialog(this, e.getConnectionStatusCode(),
-                    Constant.REQUEST_CODE_GOOGLE);
-        } catch (GooglePlayServicesNotAvailableException e) {
-            Toast.makeText(this, "Please install Google Play Services!", Toast.LENGTH_LONG).show();
-        }
-    }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;

@@ -84,7 +84,7 @@ public class SearchFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String checkQuery = searchView.getQuery().toString();
-                if (checkQuery.equals(null) || checkQuery.equals("")) {
+                if (checkQuery == null || checkQuery.equals("")) {
                     Toast.makeText(getActivity(), R.string.enter_place, Toast.LENGTH_SHORT).show();
                 } else {
                     SearchPlace(checkQuery);
@@ -95,7 +95,7 @@ public class SearchFragment extends Fragment {
         btnSearchNearbyPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainActivity.FindPlacesAroundYou();
+                searchPlacesNearby();
             }
         });
 
@@ -185,6 +185,15 @@ public class SearchFragment extends Fragment {
         return view;
     }
 
+    private void searchPlacesNearby() {
+        String uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?" +
+                "key=AIzaSyC1k2m27_zXr0_bY3r6_HH5H098-xbd59o" +
+                "&location=" + currentLocation.getLatitude() + "," + currentLocation.getLongitude() +
+                "&radius=10000";
+        executePlacesSearch(uri);
+
+    }
+
     private void saveLastSearch(ArrayList<SearchObject> arrayList) {
         if (pref.getBoolean(Constant.IS_FIRST_SEARCH, true)) {
 
@@ -209,9 +218,14 @@ public class SearchFragment extends Fragment {
 
     public void SearchPlace(String query) {
         findDistanceIn = pref.getString(Constant.DISTANCE, Constant.DISTANCE_KM);
-        String my_query = query.replace(" ", "%20");
+        String my_query = query.replace(" ", "%20");//TODO: replace with URL.encode
         String urlAddress = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyC1k2m27_zXr0_bY3r6_HH5H098-xbd59o&sensor=false&location=" + currentLocation.getLatitude() + "," + currentLocation.getLongitude() + "&radius=100000&name=";
-        Ion.with(getActivity()).load(urlAddress + my_query)
+        String uri = urlAddress + my_query;
+        executePlacesSearch(uri);
+    }
+
+    private void executePlacesSearch(String uri) {
+        Ion.with(getActivity()).load(uri)
                 .asString().setCallback(new FutureCallback<String>() {
             @Override
             public void onCompleted(Exception e, String result) {
@@ -250,20 +264,22 @@ public class SearchFragment extends Fragment {
                             String icon = place.getString("icon");
 
                             String photoReference = null;
-                            JSONArray photos = place.getJSONArray("photos");
+                            String photoAddress = null;
+
+                            JSONArray photos = place.optJSONArray("photos");
                             if (photos != null) {
                                 if (photos.length() > 0) {
                                     JSONObject photo = photos.getJSONObject(0);
                                     photoReference = photo.getString("photo_reference");
                                 }
                             }
-                            String photoAddress = null;
+
                             if (photoReference != null) {
                                 photoAddress =
                                         "https://maps.googleapis.com/maps/api/place/photo?" +
                                                 "key=AIzaSyC1k2m27_zXr0_bY3r6_HH5H098-xbd59o" +
                                                 "&photoreference=" + photoReference +
-                                                "&maxheight=400";
+                                                "&maxheight=200";
                             }
 
 
@@ -287,14 +303,17 @@ public class SearchFragment extends Fragment {
                             double distanceInMeter = currentLocation.distanceTo(placeLocation);
 
                             double distance = 0;
-                            if (findDistanceIn.equals(Constant.DISTANCE_KM)) {
-                                double kmFromYou = distanceInMeter / 1000;
-                                distance = kmFromYou;
-                            } else if (findDistanceIn.equals(Constant.DISTANCE_MILES)) {
-                                double milesFromYou = distanceInMeter / 1600;
-                                distance = milesFromYou;
-                            }
+                            if (findDistanceIn != null) {
 
+
+                                if (findDistanceIn.equals(Constant.DISTANCE_KM)) {
+                                    double kmFromYou = distanceInMeter / 1000;
+                                    distance = kmFromYou;
+                                } else if (findDistanceIn.equals(Constant.DISTANCE_MILES)) {
+                                    double milesFromYou = distanceInMeter / 1600;
+                                    distance = milesFromYou;
+                                }
+                            }
 
                             DecimalFormat decimalFormat = new DecimalFormat("0.00");
                             distance = Double.parseDouble(decimalFormat.format(distance));
