@@ -1,8 +1,6 @@
 package myapp.myapps.co.benpro.objects;
 
-/**
- * Created by Arixa on 15/02/2016.
- */
+
 public class FavoritePlace {
 
     private int id;

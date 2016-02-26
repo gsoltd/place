@@ -27,9 +27,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
@@ -58,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LastSearchLogic searchLogic;
     private GoogleMap googleMap;
     private GPSChangeReceiver gpsState;
+    public View searchHolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,21 +63,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-       // View searchHolder = findViewById(R.id.search_holder);
-       // boolean isSideBySide = (searchHolder != null);
+        searchHolder = findViewById(R.id.search_holder);
         initViews();
-
 
     }
 
     private void initViews() {
-        if(isNetworkAvailable()) {
+        if (isNetworkAvailable()) {
             mapFragment = MapFragment.newInstance();
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.map_holder, mapFragment).commit();
-
+            transaction.replace(R.id.map_holder, mapFragment);
+            if (searchHolder != null) {
+                transaction.replace(R.id.search_holder, new SearchFragment());
+            }
+            transaction.commit();
 
             mapFragment.getMapAsync(this);
 
@@ -90,10 +88,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             mClient.connect();
 
             gpsState = new GPSChangeReceiver(MainActivity.this);
-        }else{
+        } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-            builder.setMessage("Network is not available");
-            builder.setPositiveButton("OK",null);
+            builder.setMessage(R.string.network_is_not_available);
+            builder.setPositiveButton(R.string.ok, null);
             builder.show();
         }
     }
@@ -114,17 +112,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            startActivity(new Intent(MainActivity.this,SettingActivity.class));
+            startActivity(new Intent(MainActivity.this, SettingActivity.class));
         }
 
-        if(id == R.id.search_new_place){
+        if (id == R.id.search_new_place) {
 
-                showSearchFragment();
+            showSearchFragment();
 
         }
 
-        if(id == R.id.action_favorite){
-            getFragmentManager().beginTransaction().add(R.id.map_holder,new FavoriteFragment()).commit();
+        if (id == R.id.action_favorite) {
+            getFragmentManager().beginTransaction().add(R.id.map_holder, new FavoriteFragment()).commit();
         }
 
         return super.onOptionsItemSelected(item);
@@ -141,13 +139,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-       if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-           Intent i = new Intent(this,RestartService.class);
-           startService(i);
-       }else {
-           AlertDialog.Builder b = new AlertDialog.Builder(this);
-           b.setTitle("Unable to work").setMessage("This app cant work without GPS permission").show();
-       }
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Intent i = new Intent(this, RestartService.class);
+            startService(i);
+        } else {
+            AlertDialog.Builder b = new AlertDialog.Builder(this);
+            b.setTitle(R.string.unable_to_work).setMessage(R.string.this_app_cant_work_without_gps_permission).show();
+        }
     }
 
     @Override
@@ -162,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         String provider = locationManager.getBestProvider(criteria, true);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},GPS_PERMISSION_REQUEST);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, GPS_PERMISSION_REQUEST);
             return;
         }
         currentLocation = locationManager.getLastKnownLocation(provider);
@@ -173,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 @Override
                 public void onLocationChanged(Location location) {
                     currentLocation = location;
-                    addMarkerToLocation(currentLocation,true,getResources().getString(R.string.you_are_here));
+                    addMarkerToLocation(currentLocation, true, getResources().getString(R.string.you_are_here));
                 }
 
                 @Override
@@ -192,11 +190,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             }, null);
         } else {
-            addMarkerToLocation(currentLocation,true,getResources().getString(R.string.you_are_here));
+            addMarkerToLocation(currentLocation, true, getResources().getString(R.string.you_are_here));
         }
     }
 
-    public void addMarkerToLocation(Location loc,boolean isCurrentLocation,String title) {
+    public void addMarkerToLocation(Location loc, boolean isCurrentLocation, String title) {
 
         LatLng ll = new LatLng(loc.getLatitude(), loc.getLongitude());
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(
@@ -209,9 +207,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(ll);
-        if(isCurrentLocation){
+        if (isCurrentLocation) {
             markerOptions.title(getResources().getString(R.string.you_are_here));
-        }else{
+        } else {
             markerOptions.title(title);
             markerOptions.alpha(8);
         }
@@ -252,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 onBackPressed();
             } else if (resultCode == PlacePicker.RESULT_ERROR) {
-                Toast.makeText(this, "Places API failure! Check that the API is enabled for your key",
+                Toast.makeText(this, R.string.places_api_failure,
                         Toast.LENGTH_LONG).show();
             }
         } else {
@@ -273,7 +271,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             final String GPS_ACTION = "android.location.PROVIDERS_CHANGED";
             IntentFilter intentFilter = new IntentFilter(GPS_ACTION);
             registerReceiver(gpsState, intentFilter);
-        }catch(Exception e){
+        } catch (Exception e) {
 
         }
     }
@@ -287,7 +285,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-    public Location getCurrentLocation(){
+    public Location getCurrentLocation() {
         return currentLocation;
     }
 
@@ -300,11 +298,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    public FavoriteLogic getLogic(){
+    public FavoriteLogic getLogic() {
         return logic;
     }
 
-    public LastSearchLogic getLastSearchLogic(){
+    public LastSearchLogic getLastSearchLogic() {
         return searchLogic;
     }
 
@@ -315,16 +313,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    public int getScreenOrientation()
-    {
+    public int getScreenOrientation() {
         Display getOrient = getWindowManager().getDefaultDisplay();
         int orientation = Configuration.ORIENTATION_UNDEFINED;
-        if(getOrient.getWidth()==getOrient.getHeight()){
+        if (getOrient.getWidth() == getOrient.getHeight()) {
             orientation = Configuration.ORIENTATION_SQUARE;
-        } else{
-            if(getOrient.getWidth() < getOrient.getHeight()){
+        } else {
+            if (getOrient.getWidth() < getOrient.getHeight()) {
                 orientation = Configuration.ORIENTATION_PORTRAIT;
-            }else {
+            } else {
                 orientation = Configuration.ORIENTATION_LANDSCAPE;
             }
         }

@@ -22,7 +22,7 @@
         android:textSize="35dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:textColor="#0055ff" />
+        android:textColor="#d2e7d3" />
 
     <View
         android:layout_width="match_parent"
@@ -47,7 +47,7 @@
             android:layout_below="@+id/tvDistanceSetting"
             android:layout_centerHorizontal="true"
             android:checked="true"
-            android:textSize="20dp" />
+            android:textSize="25dp" />
 
         <RadioButton
             android:layout_width="wrap_content"
@@ -58,40 +58,40 @@
             android:layout_alignLeft="@+id/rbKM"
             android:layout_alignStart="@+id/rbKM"
             android:checked="false"
-            android:textSize="20dp" />
+            android:textSize="25dp" />
     </RadioGroup>
 
     <Button
         android:id="@+id/btnSaveSetting"
-        android:text="@string/save"
-        android:textColor="#FFFFFF"
-        android:textSize="20dp"
+        android:text="Save"
+        android:textColor="#D4FFD7"
+        android:textSize="25sp"
+        android:onClick="saveSetting_onClick"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/button_save"
-        android:shadowColor="#0818A8"
+        android:background="@drawable/button_general"
+        android:shadowColor="#320DA8"
         android:shadowDx="5"
-        android:shadowDy="3"
-        android:shadowRadius="5"
-        android:layout_below="@+id/radioGroup"
-        android:layout_alignLeft="@+id/tvDistanceSetting"
-        android:layout_alignStart="@+id/tvDistanceSetting"
-        android:onClick="saveSetting_onClick"/>
+        android:shadowDy="4"
+        android:shadowRadius="3"
+        android:layout_centerVertical="true"
+        android:layout_alignRight="@+id/radioGroup"
+        android:layout_alignEnd="@+id/radioGroup" />
 
     <Button
         android:id="@+id/btnDeleteAllFromFavorite"
-        android:text="@string/delete_all_from_fav"
-        android:textColor="#FFFFFF"
-        android:textSize="15dp"
+        android:onClick="deleteAllFromFav_onClick"
+        android:text="Delete all from favorite"
+        android:textColor="#D4FFD7"
+        android:textSize="25sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/button_delete"
-        android:shadowColor="#0818A8"
+        android:shadowColor="#320DA8"
         android:shadowDx="5"
-        android:shadowDy="3"
-        android:shadowRadius="5"
+        android:shadowDy="4"
+        android:shadowRadius="3"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="45dp"
-        android:onClick="deleteAllFromFav_onClick"/>
+        android:layout_marginBottom="47dp" />
 </RelativeLayout>

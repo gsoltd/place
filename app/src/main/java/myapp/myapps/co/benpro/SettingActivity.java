@@ -26,7 +26,7 @@ public class SettingActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        initalViews();
+        initViews();
     }
 
     @Override
@@ -42,7 +42,7 @@ public class SettingActivity extends AppCompatActivity {
         logic.close();
     }
 
-    private void initalViews() {
+    private void initViews() {
         pref = PreferenceManager.getDefaultSharedPreferences(SettingActivity.this);
         rbKM = (RadioButton) findViewById(R.id.rbKM);
         rbMiles = (RadioButton) findViewById(R.id.rbMiles);

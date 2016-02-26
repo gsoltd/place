@@ -59,7 +59,7 @@ public class LastSearchAdapter extends ArrayAdapter<FavoritePlace> {
         holder.textViewAddress.setText(arrayList.get(position).getAddress());
         String distanceIn = pref.getString(Constant.DISTANCE,Constant.DISTANCE_KM);
         if(distanceIn.equals(Constant.DISTANCE_KM)){
-            holder.textViewDistance.setText("KM from you: " + arrayList.get(position).getDistance());
+            holder.textViewDistance.setText("Km from you: " + arrayList.get(position).getDistance());
         }else if(distanceIn.equals(Constant.DISTANCE_MILES)){
             holder.textViewDistance.setText("Miles from you: " + arrayList.get(position).getDistance());
         }

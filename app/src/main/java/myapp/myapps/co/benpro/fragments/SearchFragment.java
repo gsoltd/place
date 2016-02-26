@@ -75,9 +75,9 @@ public class SearchFragment extends Fragment {
         btnSearchByName = (Button) view.findViewById(R.id.btnSearchByNameSearchFragment);
         btnSearchNearbyPlace = (Button) view.findViewById(R.id.btnSearchNearbyPlaceSearchFragment);
 
-        currentLocation = mainActivity.getCurrentLocation();
+
         pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        searchLogic = mainActivity.getLastSearchLogic();
+
 
 
         btnSearchByName.setOnClickListener(new View.OnClickListener() {
@@ -87,7 +87,7 @@ public class SearchFragment extends Fragment {
                 if (checkQuery == null || checkQuery.equals("")) {
                     Toast.makeText(getActivity(), R.string.enter_place, Toast.LENGTH_SHORT).show();
                 } else {
-                    SearchPlace(checkQuery);
+                    searchPlace(checkQuery);
                 }
             }
         });
@@ -112,7 +112,9 @@ public class SearchFragment extends Fragment {
 
                     mainActivity.addMarkerToLocation(location, false, title);
 
-                    getActivity().getFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
+                    if(mainActivity.searchHolder == null) {
+                        getActivity().getFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
+                    }
                 }
             });
 
@@ -157,9 +159,9 @@ public class SearchFragment extends Fragment {
                     saveQuery = query;
                     if (!query.equals(null) && !query.equals("")) {
                         if (mainActivity.isNetworkAvailable()) {
-                            SearchPlace(query);
+                            searchPlace(query);
                         } else {
-                            Toast.makeText(getActivity(), "Network Disabled", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), R.string.network_disabled, Toast.LENGTH_LONG).show();
 
                         }
                     }
@@ -172,7 +174,7 @@ public class SearchFragment extends Fragment {
                 }
             });
         } else {
-            Toast.makeText(getActivity(), "Network Disabled", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), R.string.network_disabled, Toast.LENGTH_LONG).show();
             ArrayList<FavoritePlace> arrayList = searchLogic.getLastSearch();
 
 
@@ -186,6 +188,8 @@ public class SearchFragment extends Fragment {
     }
 
     private void searchPlacesNearby() {
+        searchLogic = mainActivity.getLastSearchLogic();
+        currentLocation = mainActivity.getCurrentLocation();
         String uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?" +
                 "key=AIzaSyC1k2m27_zXr0_bY3r6_HH5H098-xbd59o" +
                 "&location=" + currentLocation.getLatitude() + "," + currentLocation.getLongitude() +
@@ -209,16 +213,18 @@ public class SearchFragment extends Fragment {
         boolean refresh = pref.getBoolean(Constant.REFRESH_LIST, false);
         if (refresh) {
             if (mainActivity.isNetworkAvailable()) {
-                SearchPlace(saveQuery);
+                searchPlace(saveQuery);
             } else {
-                Toast.makeText(getActivity(), "Network Disabled", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), R.string.network_disabled, Toast.LENGTH_LONG).show();
             }
         }
     }
 
-    public void SearchPlace(String query) {
+    public void searchPlace(String query) {
+        searchLogic = mainActivity.getLastSearchLogic();
         findDistanceIn = pref.getString(Constant.DISTANCE, Constant.DISTANCE_KM);
         String my_query = query.replace(" ", "%20");//TODO: replace with URL.encode
+        currentLocation = mainActivity.getCurrentLocation();
         String urlAddress = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyC1k2m27_zXr0_bY3r6_HH5H098-xbd59o&sensor=false&location=" + currentLocation.getLatitude() + "," + currentLocation.getLongitude() + "&radius=100000&name=";
         String uri = urlAddress + my_query;
         executePlacesSearch(uri);
