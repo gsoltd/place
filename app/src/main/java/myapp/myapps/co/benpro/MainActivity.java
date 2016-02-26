@@ -50,6 +50,7 @@ import myapp.myapps.co.benpro.logic.LastSearchLogic;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener {
 
+    private static final int GPS_PERMISSION_REQUEST = 3;
     private MapFragment mapFragment;
     private Location currentLocation;
     private GoogleApiClient mClient;
@@ -139,6 +140,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+       if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+           Intent i = new Intent(this,RestartService.class);
+           startService(i);
+       }else {
+           AlertDialog.Builder b = new AlertDialog.Builder(this);
+           b.setTitle("Unable to work").setMessage("This app cant work without GPS permission").show();
+       }
+    }
+
+    @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -150,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         String provider = locationManager.getBestProvider(criteria, true);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},GPS_PERMISSION_REQUEST);
             return;
         }
         currentLocation = locationManager.getLastKnownLocation(provider);
