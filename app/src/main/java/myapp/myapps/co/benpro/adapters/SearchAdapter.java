@@ -56,18 +56,19 @@ public class SearchAdapter extends ArrayAdapter<SearchObject> {
             holder = (ViewHolder) row.getTag();
         }
 
-        holder.textViewName.setText(arrayList.get(position).getName());
-        holder.textViewAddress.setText(arrayList.get(position).getAddress());
-        Picasso.with(context).load(arrayList.get(position).getIcon()).into(holder.icon);
-        String photo = arrayList.get(position).getPhoto();
+        SearchObject item = arrayList.get(position);
+        holder.textViewName.setText(item.getName());
+        holder.textViewAddress.setText(item.getAddress());
+        Picasso.with(context).load(item.getIcon()).into(holder.icon);
+        String photo = item.getPhoto();
         if (photo != null) {
             Picasso.with(context).load(photo).into(holder.imageViewPhoto);
         }
         String distanceIn = pref.getString(Constant.DISTANCE, Constant.DISTANCE_KM);
         if (distanceIn.equals(Constant.DISTANCE_KM)) {
-            holder.textViewDistance.setText("KM from you: " + arrayList.get(position).getDistance());
+            holder.textViewDistance.setText("KM from you: " + item.getDistance());
         } else if (distanceIn.equals(Constant.DISTANCE_MILES)) {
-            holder.textViewDistance.setText("Miles from you: " + arrayList.get(position).getDistance());
+            holder.textViewDistance.setText("Miles from you: " + item.getDistance());
         }
 
         return row;
