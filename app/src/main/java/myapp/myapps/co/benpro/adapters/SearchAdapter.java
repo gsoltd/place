@@ -64,12 +64,18 @@ public class SearchAdapter extends ArrayAdapter<SearchObject> {
         if (photo != null) {
             Picasso.with(context).load(photo).into(holder.imageViewPhoto);
         }
-        String distanceIn = pref.getString(Constant.DISTANCE, Constant.DISTANCE_KM);
-        if (distanceIn.equals(Constant.DISTANCE_KM)) {
-            holder.textViewDistance.setText("KM from you: " + item.getDistance());
-        } else if (distanceIn.equals(Constant.DISTANCE_MILES)) {
-            holder.textViewDistance.setText("Miles from you: " + item.getDistance());
+        if (item.getDistance() != 0) {
+            String distanceIn = pref.getString(Constant.DISTANCE, Constant.DISTANCE_KM);
+            if (distanceIn.equals(Constant.DISTANCE_KM)) {
+                holder.textViewDistance.setText("KM from you: " + item.getDistance());
+            } else if (distanceIn.equals(Constant.DISTANCE_MILES)) {
+                holder.textViewDistance.setText("Miles from you: " + item.getDistance());
+            }
+            holder.textViewDistance.setVisibility(View.VISIBLE);
+        } else {
+          holder.textViewDistance.setVisibility(View.GONE);
         }
+
 
         return row;
     }

@@ -11,7 +11,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="myapp.myapps.co.benplaces_.SettingActivity"
     tools:showIn="@layout/activity_setting"
-    android:background="@drawable/map1">
+    android:background="#cecfcb">
 
     <TextView
         android:layout_width="wrap_content"
@@ -22,7 +22,7 @@
         android:textSize="35dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:textColor="#d2e7d3" />
+        android:textColor="#5c6386" />
 
     <View
         android:layout_width="match_parent"
@@ -65,7 +65,7 @@
         android:id="@+id/btnSaveSetting"
         android:text="Save"
         android:textColor="#D4FFD7"
-        android:textSize="25sp"
+        android:textSize="20dp"
         android:onClick="saveSetting_onClick"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -81,9 +81,9 @@
     <Button
         android:id="@+id/btnDeleteAllFromFavorite"
         android:onClick="deleteAllFromFav_onClick"
-        android:text="Delete all from favorite"
+        android:text="@string/delete_all_favorites"
         android:textColor="#D4FFD7"
-        android:textSize="25sp"
+        android:textSize="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/button_delete"

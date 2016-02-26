@@ -11,7 +11,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Name"
         android:id="@+id/tvFavoriteRowName"
-        android:layout_margin="10dp"
+        android:layout_margin="4dp"
         android:textColor="#c8cfd6"/>
 
     <TextView
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/tvFavoriteRowAddress"
         android:text="Address"
-        android:layout_margin="10dp"
+        android:layout_margin="4dp"
         android:textColor="#c8cfd6"/>
 
 </LinearLayout>

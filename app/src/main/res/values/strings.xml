@@ -27,6 +27,7 @@
     <string name="unable_to_work">Unable to work</string>
     <string name="this_app_cant_work_without_gps_permission">This app cant work without GPS permission</string>
     <string name="places_api_failure">Places API failure! Check that the API is enabled for your key</string>
+    <string name="delete_all_favorites">Delete all favorites</string>
     <bool name="isTablet">false</bool>
 
 </resources>
