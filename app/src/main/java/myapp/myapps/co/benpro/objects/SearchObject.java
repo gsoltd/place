@@ -1,8 +1,6 @@
 package myapp.myapps.co.benpro.objects;
 
-/**
- * Created by Arixa on 15/02/2016.
- */
+
 public class SearchObject {
 
     private double lat;
@@ -11,14 +9,17 @@ public class SearchObject {
     private String address;
     private String icon;
     private double distance;
+    private String photo;
 
-    public SearchObject(double lat, double lon, String name, String address,String icon,double distance){
+
+    public SearchObject(double lat, double lon, String name, String address,String icon,double distance,String photo){
         this.lat = lat;
         this.lon = lon;
         this.name = name;
         this.address = address;
         this.icon = icon;
         this.distance = distance;
+        this.photo = photo;
     }
 
     public String toString(){
@@ -47,6 +48,10 @@ public class SearchObject {
 
     public double getDistance() {
         return distance;
+    }
+
+    public String getPhoto() {
+        return photo;
     }
 }
 

@@ -159,7 +159,7 @@ public class SearchFragment extends Fragment {
                         if (mainActivity.isNetworkAvailable()) {
                             SearchPlace(query);
                         } else {
-                            Toast.makeText(getActivity(),"Network Disabled",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Network Disabled", Toast.LENGTH_LONG).show();
 
                         }
                     }
@@ -171,7 +171,8 @@ public class SearchFragment extends Fragment {
                     return false;
                 }
             });
-        } else { Toast.makeText(getActivity(),"Network Disabled",Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getActivity(), "Network Disabled", Toast.LENGTH_LONG).show();
             ArrayList<FavoritePlace> arrayList = searchLogic.getLastSearch();
 
 
@@ -201,7 +202,7 @@ public class SearchFragment extends Fragment {
             if (mainActivity.isNetworkAvailable()) {
                 SearchPlace(saveQuery);
             } else {
-                Toast.makeText(getActivity(),"Network Disabled",Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Network Disabled", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -248,6 +249,23 @@ public class SearchFragment extends Fragment {
                             // Get the name:
                             String icon = place.getString("icon");
 
+                            String photoReference = null;
+                            JSONArray photos = place.getJSONArray("photos");
+                            if (photos != null) {
+                                if (photos.length() > 0) {
+                                    JSONObject photo = photos.getJSONObject(0);
+                                    photoReference = photo.getString("photo_reference");
+                                }
+                            }
+                            String photoAddress = null;
+                            if (photoReference != null) {
+                                photoAddress =
+                                        "https://maps.googleapis.com/maps/api/place/photo?" +
+                                                "key=AIzaSyC1k2m27_zXr0_bY3r6_HH5H098-xbd59o" +
+                                                "&photoreference=" + photoReference +
+                                                "&maxheight=400";
+                            }
+
 
                             String name = place.getString("name");
                             Log.d("name", name + "");
@@ -278,11 +296,16 @@ public class SearchFragment extends Fragment {
                             }
 
 
-
                             DecimalFormat decimalFormat = new DecimalFormat("0.00");
                             distance = Double.parseDouble(decimalFormat.format(distance));
 
-                            SearchObject searchObject = new SearchObject(Double.parseDouble(latitude), Double.parseDouble(longitude), name, address, icon, distance);
+                            SearchObject searchObject = new SearchObject(Double.parseDouble(latitude),
+                                    Double.parseDouble(longitude),
+                                    name,
+                                    address,
+                                    icon,
+                                    distance,
+                                    photoAddress);
                             arrayListSearchResult.add(searchObject);
                             searchAdapter.notifyDataSetChanged();
 

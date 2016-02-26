@@ -44,10 +44,10 @@ public class LastSearchAdapter extends ArrayAdapter<FavoritePlace> {
         {
             row = inflater.inflate(R.layout.search_row,null);
             // initialize the elements
-            holder.tvNameHolder = (TextView) row.findViewById(R.id.tvSearchRowName);
-            holder.tvAddressHolder = (TextView) row.findViewById(R.id.tvSearchRowAddress);
-            holder.imageViewHolder = (ImageView) row.findViewById(R.id.imgViewSearchRow);
-            holder.tvDistance = (TextView) row.findViewById(R.id.tvDistanceSearchRow);
+            holder.textViewName = (TextView) row.findViewById(R.id.tvSearchRowName);
+            holder.textViewAddress = (TextView) row.findViewById(R.id.tvSearchRowAddress);
+            holder.icon = (ImageView) row.findViewById(R.id.imgViewSearchRow);
+            holder.textViewDistance = (TextView) row.findViewById(R.id.tvDistanceSearchRow);
             row.setTag(holder);
         }
         else
@@ -55,13 +55,13 @@ public class LastSearchAdapter extends ArrayAdapter<FavoritePlace> {
             holder = (ViewHolder)row.getTag();
         }
 
-        holder.tvNameHolder.setText(arrayList.get(position).getName());
-        holder.tvAddressHolder.setText(arrayList.get(position).getAddress());
+        holder.textViewName.setText(arrayList.get(position).getName());
+        holder.textViewAddress.setText(arrayList.get(position).getAddress());
         String distanceIn = pref.getString(Constant.DISTANCE,Constant.DISTANCE_KM);
         if(distanceIn.equals(Constant.DISTANCE_KM)){
-            holder.tvDistance.setText("KM from you: " + arrayList.get(position).getDistance());
+            holder.textViewDistance.setText("KM from you: " + arrayList.get(position).getDistance());
         }else if(distanceIn.equals(Constant.DISTANCE_MILES)){
-            holder.tvDistance.setText("Miles from you: " + arrayList.get(position).getDistance());
+            holder.textViewDistance.setText("Miles from you: " + arrayList.get(position).getDistance());
         }
 
         return row;
