@@ -23,6 +23,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -64,17 +65,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        initalViews();
+       // View searchHolder = findViewById(R.id.search_holder);
+       // boolean isSideBySide = (searchHolder != null);
+        initViews();
 
-        Toast.makeText(getBaseContext(),"is phone = " + isPhone(),Toast.LENGTH_SHORT).show();
+
     }
 
-    private void initalViews() {
+    private void initViews() {
         if(isNetworkAvailable()) {
             mapFragment = MapFragment.newInstance();
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.add(R.id.map_holder, mapFragment).commit();
+            transaction.replace(R.id.map_holder, mapFragment).commit();
 
 
             mapFragment.getMapAsync(this);
@@ -114,9 +117,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         if(id == R.id.search_new_place){
-            if(isPhone()) {
+
                 showSearchFragment();
-            }
+
         }
 
         if(id == R.id.action_favorite){
@@ -331,14 +334,5 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         return orientation;
     }
 
-    public boolean isPhone(){
-        boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
-        if (tabletSize) {
-            // do something
-            return false;
-        } else {
-            // do something else
-            return true;
-        }
-    }
+
 }
