@@ -157,7 +157,7 @@ public class SearchFragment extends Fragment {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
                     saveQuery = query;
-                    if (!query.equals(null) && !query.equals("")) {
+                    if (query != null && !query.equals("")) {
                         if (mainActivity.isNetworkAvailable()) {
                             searchPlace(query);
                         } else {
@@ -188,8 +188,14 @@ public class SearchFragment extends Fragment {
     }
 
     private void searchPlacesNearby() {
-        searchLogic = mainActivity.getLastSearchLogic();
         currentLocation = mainActivity.getCurrentLocation();
+        if (currentLocation == null){
+            Toast.makeText(getActivity(),"No Gps Signal",Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        searchLogic = mainActivity.getLastSearchLogic();
+
         String uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?" +
                 "key=AIzaSyC1k2m27_zXr0_bY3r6_HH5H098-xbd59o" +
                 "&location=" + currentLocation.getLatitude() + "," + currentLocation.getLongitude() +
@@ -220,14 +226,24 @@ public class SearchFragment extends Fragment {
         }
     }
 
-    public void searchPlace(String query) {
+    private void searchPlace(String query) {
+        currentLocation = mainActivity.getCurrentLocation();
+        if (currentLocation == null){
+            Toast.makeText(getActivity(),"No Gps Signal",Toast.LENGTH_LONG).show();
+            return;
+        }
+
         searchLogic = mainActivity.getLastSearchLogic();
         findDistanceIn = pref.getString(Constant.DISTANCE, Constant.DISTANCE_KM);
-        String my_query = query.replace(" ", "%20");//TODO: replace with URL.encode
-        currentLocation = mainActivity.getCurrentLocation();
-        String urlAddress = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyC1k2m27_zXr0_bY3r6_HH5H098-xbd59o&sensor=false&location=" + currentLocation.getLatitude() + "," + currentLocation.getLongitude() + "&radius=100000&name=";
+        String my_query = query.replace(" ", "%20");
+
+        String urlAddress = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?" +
+                "key=AIzaSyC1k2m27_zXr0_bY3r6_HH5H098-xbd59o&sensor=false&" +
+                "location=" + currentLocation.getLatitude() + "," + currentLocation.getLongitude() +
+                "&radius=100000&name=";
         String uri = urlAddress + my_query;
         executePlacesSearch(uri);
+
     }
 
     private void executePlacesSearch(String uri) {
